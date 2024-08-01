@@ -1,46 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hydration Calculator</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 400px;
-            margin: auto;
-            padding: 20px;
-        }
-        label, select, input {
-            display: block;
-            margin: 10px 0;
-        }
-        button {
-            padding: 10px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hydration Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 400px;
+      margin: auto;
+      padding: 20px;
+    }
+    label, select, input {
+      display: block;
+      margin: 10px 0;
+    }
+    button {
+      padding: 10px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 <body>
-    <h1>Hydration Calculator</h1>
-    <label for="drink">Select a drink:</label>
-    <select id="drink">
-        <!-- Options will be dynamically populated -->
-    </select>
+  <h1>Hydration Calculator</h1>
+  <label for="drink">Select a drink:</label>
+  <select id="drink">
+    <!-- Options will be dynamically populated -->
+  </select>
 
-    <label for="amount">Enter amount (oz):</label>
-    <input type="number" id="amount" min="0" step="0.1">
+  <label for="amount">Enter amount (oz):</label>
+  <input type="number" id="amount" min="0" step="0.1">
 
-    <button onclick="calculateHydration()">Calculate Hydration</button>
+  <button onclick="calculateHydration()">Calculate Hydration</button>
 
-    <h2 id="result"></h2>
+  <h2 id="result"></h2>
 
-    <script src="app.js"></script>
+  <script>
+    const drinkMultipliers = {
+      "Water": 1.0,
+      "Coffee": 0.8,
+      "Tea": 0.9,
+      "Soda": 0.7,
+      "Juice": 1.1,
+      "Beer": 0.6
+    };
+
+    // Populate the drink options
+    window.onload = function() {
+        const drinkSelect = document.getElementById('drink');
+        for (const drink in drinkMultipliers) {
+            const option = document.createElement('option');
+            option.value = drink;
+            option.textContent = drink;
+            drinkSelect.appendChild(option);
+        }
+    };
+
+    function calculateHydration() {
+        const drinkSelect = document.getElementById('drink');
+        const drink = drinkSelect.value;
+        const amount = parseFloat(document.getElementById('amount').value);
+
+        if (isNaN(amount) || amount <= 0) {
+            document.getElementById('result').textContent = "Please enter a valid amount.";
+            return;
+        }
+
+        const multiplier = drinkMultipliers[drink];
+        const hydrationAmount = amount * multiplier;
+
+        document.getElementById('result').textContent = `You got ${hydrationAmount.toFixed(2)} oz of hydration from ${amount} oz of ${drink}.`;
+    }
+  </script>
 </body>
 </html>
